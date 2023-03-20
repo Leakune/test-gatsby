@@ -6,6 +6,7 @@ declare module "*.css" {
     navLinks;
     navLinkItem;
     navLinkText;
+    siteTitle;
   };
   export = styles;
 }
