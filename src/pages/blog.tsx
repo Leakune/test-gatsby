@@ -9,12 +9,19 @@ import {
 import Layout from "../components/layout";
 import Seo from "../components/seo";
 
+type DataFrontmatter = {
+  title: string;
+  date: string;
+};
+
 type DataNodes = {
-  name: string;
+  id: string;
+  frontmatter: DataFrontmatter;
+  excerpt: string;
 };
 
 type DataBlog = {
-  allFile: {
+  allMdx: {
     nodes: DataNodes[];
   };
 };
@@ -22,20 +29,28 @@ type DataBlog = {
 const BlogPage = ({ data }: PageProps<DataBlog>) => {
   return (
     <Layout pageTitle="My Blog Posts">
-      <ul>
-        {data.allFile.nodes.map((node) => (
-          <li key={node.name}>{node.name}</li>
-        ))}
-      </ul>
+      {data.allMdx.nodes.map((node) => (
+        <article key={node.id}>
+          <h2>{node.frontmatter.title}</h2>
+          <p>Posted: {node.frontmatter.date}</p>
+          <p>{node.excerpt}</p>
+        </article>
+      ))}
     </Layout>
   );
 };
 
 export const query = graphql`
-  query MyQuery {
-    allFile {
+  query {
+    allMdx(sort: { frontmatter: { date: DESC } }) {
       nodes {
-        name
+        id
+        frontmatter {
+          date(formatString: "DD/MM/yyyy")
+          title
+          slug
+        }
+        excerpt
       }
     }
   }
