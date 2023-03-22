@@ -21,10 +21,7 @@ const Layout = ({
 }: React.PropsWithChildren<LayoutProps>) => {
   const data = useStaticQuery(graphql`
     query {
-      site(
-        siteMetadata: { title: { eq: "My Gatsby Site" }, siteUrl: {} }
-        port: {}
-      ) {
+      site(siteMetadata: { title: { eq: "My Gatsby Site" } }) {
         siteMetadata {
           title
           siteUrl
