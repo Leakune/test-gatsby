@@ -1,17 +1,14 @@
 import * as React from "react";
-import {
-  graphql,
-  PageProps,
-  StaticQueryDocument,
-  StaticQueryProps,
-} from "gatsby";
+import { graphql, Link, PageProps } from "gatsby";
 
-import Layout from "../components/layout";
-import Seo from "../components/seo";
+import { navLinkText } from "../../components/layout.module.css";
+import Layout from "../../components/layout";
+import Seo from "../../components/seo";
 
 type DataFrontmatter = {
   title: string;
   date: string;
+  slug: string;
 };
 
 type DataNodes = {
@@ -31,9 +28,11 @@ const BlogPage = ({ data }: PageProps<DataBlog>) => {
     <Layout pageTitle="My Blog Posts">
       {data.allMdx.nodes.map((node) => (
         <article key={node.id}>
-          <h2>{node.frontmatter.title}</h2>
-          <p>Posted: {node.frontmatter.date}</p>
-          <p>{node.excerpt}</p>
+          <h2>
+            <Link to={`/blog/${node.frontmatter.slug}`}>
+              {node.frontmatter.title}
+            </Link>
+          </h2>
         </article>
       ))}
     </Layout>
@@ -42,7 +41,7 @@ const BlogPage = ({ data }: PageProps<DataBlog>) => {
 
 export const query = graphql`
   query {
-    allMdx(sort: { frontmatter: { date: DESC } }) {
+    allMdx(sort: { frontmatter: { date: ASC } }) {
       nodes {
         id
         frontmatter {
